@@ -1,0 +1,13 @@
+{application, evalso, [
+	{description,
+		"Sandboxed code evaluation platform"},
+	{vsn, "1"},
+	{modules, []},
+	{applications, [
+		kernel,
+		stdlib,
+		ibrowse,
+    jsx
+	]}
+]}.
+
