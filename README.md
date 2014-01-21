@@ -3,7 +3,7 @@
 ## Usage
 
     evalso:evaluate(ruby, "puts 1").
-
+    2> evalso:evaluate(ruby, "puts 1").
 
 ## Contributing
 
