@@ -8,6 +8,8 @@
 		stdlib,
 		ibrowse,
     jsx
-	]}
+	]},
+  {env, [
+    {api_host, "http://eval.so/api"}
+  ]}
 ]}.
-
