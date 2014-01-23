@@ -17,12 +17,13 @@ evaluate(Lng, Text) ->
   {ok, ApiHost} = application:get_env(evalso, api_host),
   EvaluateUrl = ApiHost ++ "/evaluate",
   case ibrowse:send_req(EvaluateUrl, [{"Content-Type", "application/json"}], post, jsx:encode(Body)) of
-    {ok, _, _, Json} ->
-      case jsx:is_json(Json) of
+    {ok, _, _, RespBody} ->
+      BinBody = iolist_to_binary(RespBody),
+      case jsx:is_json(BinBody) of
         false ->
           {error, "received body is not json"};
         true ->
-          case jsx:decode(iolist_to_binary(Json)) of
+          case jsx:decode(BinBody) of
             [{<<"stdout">>, Stdout}, {<<"stderr">>, Stderr}, _, {<<"exitCode">>, 0}] ->
               {ok, {success_exit, Stdout, Stderr}};
             [{<<"stdout">>, Stdout}, {<<"stderr">>, Stderr}, _, {<<"exitCode">>, 1}] ->

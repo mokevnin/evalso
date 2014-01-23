@@ -25,7 +25,7 @@ evalso_test() ->
 evalso_bad_response_test() ->
   meck:new(ibrowse),
   Func = fun(_Url, _Headers, post, _Body) ->
-    {ok, undefined, undefined, bad_request}
+    {ok, undefined, undefined, "bad_request"}
   end,
   meck:expect(ibrowse, send_req, Func),
   {error, _Reason} = evalso:evaluate(ruby, "puts 1"),

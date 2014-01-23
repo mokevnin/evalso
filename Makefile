@@ -4,4 +4,4 @@ compile:
 	$(REBAR) compile
 
 run: compile
-	erl -pa ebin deps/*/ebin -s sync go -s evalso
+	erl -config $(CURDIR)/sys -pa ebin deps/*/ebin -s sync go -s evalso
