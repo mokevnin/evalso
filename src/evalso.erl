@@ -8,9 +8,13 @@ start() ->
   [application:start(App) || App <- Apps],
   ok.
 
-evaluate(Lng, Text) ->
+evaluate(RawLng, Text) ->
+  Lng = if
+    is_binary(RawLng) -> RawLng;
+    true -> iolist_to_binary(io_lib:format("~p", [RawLng]))
+  end,
   Body = [
-    {language, iolist_to_binary(io_lib:format("~p", [Lng]))},
+    {language, Lng},
     {code, iolist_to_binary(Text)}
   ],
 
@@ -24,10 +28,8 @@ evaluate(Lng, Text) ->
           {error, "received body is not json"};
         true ->
           case jsx:decode(BinBody) of
-            [{<<"stdout">>, Stdout}, {<<"stderr">>, Stderr}, _, {<<"exitCode">>, 0}] ->
-              {ok, {success_exit, Stdout, Stderr}};
-            [{<<"stdout">>, Stdout}, {<<"stderr">>, Stderr}, _, {<<"exitCode">>, 1}] ->
-              {ok, {bad_exit, Stdout, Stderr}}
+            [{<<"stdout">>, Stdout}, {<<"stderr">>, Stderr}, _, {<<"exitCode">>, ExitCode}] ->
+              {ok, {ExitCode, Stdout, Stderr}}
           end
       end;
     {error, Reason} -> {error, Reason}
