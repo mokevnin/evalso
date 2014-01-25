@@ -16,7 +16,7 @@ evalso_test() ->
     {ok, undefined, undefined, jsx:encode(Result)}
   end,
   meck:expect(ibrowse, send_req, Func),
-  {ok, {success_exit, _Stdout, _Stderr}} = evalso:evaluate(ruby, "puts 1"),
+  {ok, {0, _Stdout, _Stderr}} = evalso:evaluate(ruby, "puts 1"),
 
   ?assert(meck:validate(ibrowse)),
   meck:unload(ibrowse),
